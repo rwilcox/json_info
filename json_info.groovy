@@ -30,10 +30,10 @@ String curentParentInfo(JsonStreamContext parsingContext) {
 	}
 }
 
-def main(def stream) {
+
+def handleStream(def stream) {
 	JsonFactory jsonFactory = new JsonFactory()
 	JsonParser jp = jsonFactory.createJsonParser( stream )
-
 
 	while ( true ) {
 		def currentToken = jp.nextToken()
@@ -48,10 +48,31 @@ def main(def stream) {
 
 			def parentInfo = curentParentInfo(jp.parsingContext.parent)
 
-			println ":${jp.getCurrentLocation().lineNr}\tPath:${parentInfo}${nameOrIndex(jp.parsingContext)}\tValue:${jp.currentName}"
+			println "${jp.getCurrentLocation().lineNr}\tPath:${parentInfo}${nameOrIndex(jp.parsingContext)}\tField Name:${jp.currentName}"
 
 		}
 	}
 }
 
-main( new File("./test.json") )
+// ==================== Start the program!! ===================================
+
+def stream = System.in
+def cli = new CliBuilder(usage: 'json_info.groovy -[h] [file]')
+cli.with {
+	h longOpt: 'help', 'Show usage information'
+}
+
+def options = cli.parse(args)
+if (!options) {
+	return
+}
+// Show usage text when -h or --help option is used.
+if (options.h) {
+	cli.usage()
+	return
+}
+
+if (options.arguments().size == 1)
+	stream = new File( options.arguments()[0])
+
+handleStream( stream )
