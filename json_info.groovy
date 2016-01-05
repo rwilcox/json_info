@@ -13,7 +13,7 @@ String nameOrIndex(JsonStreamContext parsingContext) {
 	} else {
 		def index = parsingContext.currentIndex
 		if (index)
-			currentInfo = "[${index}]"
+			currentInfo = "[${index -1}]"
 	}
 
 	return currentInfo
