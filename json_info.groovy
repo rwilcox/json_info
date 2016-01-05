@@ -37,9 +37,8 @@ def handleStream(def stream) {
 
 	while ( true ) {
 		def currentToken = jp.nextToken()
-		if ( (currentToken == JsonToken.END_OBJECT) && (!jp.parsingContext.parent) ) {
-			// if we're at the top level and the object ends, we're at the end of our object.
-			// elsewise we're ending a sub-object.
+		if ( currentToken == null ) {
+			// means we're at the end of our document
 			break
 		}
 
