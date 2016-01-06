@@ -12,8 +12,12 @@ String nameOrIndex(JsonStreamContext parsingContext) {
 		currentInfo = ".${currentName}"
 	} else {
 		def index = parsingContext.currentIndex
-		if (index)
+
+		if ( (index != null) && (!parsingContext.inRoot()) ) {
+			// index could be null or could be 0
+			// both are Groovy falsey. So explicitly check for just null
 			currentInfo = "[${index}]"
+		}
 	}
 
 	return currentInfo
